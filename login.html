@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p>Login to manage your Fridgy kitchen.</p>
+        
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="margin-bottom: 0;">Password</label>
+                    <a href="/forgot-password" style="font-size: 0.75rem; color: #2e7d32; text-decoration: none; font-weight: 600;">Forgot Password?</a>
+                </div>
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="login-password" placeholder="Enter password" required>
+                    <span class="eye-btn" onclick="togglePass('login-password', this)">👁</span>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-primary full-width">Login</button>
+        </form>
+        
+        <p class="auth-footer">Don't have an account? <a href="/signup">Register here</a></p>
+    </div>
+</div>
+
+<script>
+    function togglePass(id, btn) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+            btn.innerText = "🕶";
+        } else {
+            input.type = "password";
+            btn.innerText = "👁";
+        }
+    }
+</script>
+{% endblock %}

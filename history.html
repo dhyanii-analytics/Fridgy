@@ -1,0 +1,184 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+    /* 1. HIDE the guest navigation bar  */
+    nav, .navbar, .guest-nav { 
+        display: none !important; 
+    }
+
+    /* 2. SHARED USER NAVIGATION  */
+    .user-nav-bar {
+        background: #ffffff;
+        padding: 12px 50px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        list-style: none;
+        margin: 0;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #444;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    /* 3. PROPER MARKDOWN FORMATTING  */
+    .chat-response-content h1, 
+    .chat-response-content h2, 
+    .chat-response-content h3 {
+        color: #2e7d32;
+        font-size: 1.3rem;
+        margin: 20px 0 10px 0;
+        font-weight: 700;
+    }
+    
+    .chat-response-content ul, 
+    .chat-response-content ol {
+        padding-left: 25px;
+        margin-bottom: 15px;
+    }
+    
+    .chat-response-content li {
+        margin-bottom: 8px;
+    }
+
+    .chat-response-content strong {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .detail-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .detail-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08) !important;
+    }
+
+    /* Admin Badge Styling */
+    .admin-user-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #c8e6c9;
+    }
+</style>
+
+<header class="user-nav-bar">
+    <a href="{{ url_for('main.dashboard') }}" class="nav-brand">
+        <img src="{{ url_for('static', filename='img/fridgylogo.png') }}" alt="Fridgy Logo" style="height: 45px;">
+        <span style="font-weight: bold; font-size: 1.5rem; color: #2e7d32; font-family: 'Poppins', sans-serif;">Fridgy</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('main.dashboard') }}">Home</a></li>
+        {% if current_user.is_admin %}
+            <li><a href="{{ url_for('main.admin_dashboard') }}">Admin Panel</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+        <li><a href="{{ url_for('main.history') }}" style="color: #2e7d32; border-bottom: 2px solid #2e7d32;">History</a></li>
+        <li><a href="{{ url_for('main.logout') }}" style="color: #c62828;">Logout</a></li>
+    </ul>
+</header>
+
+<div class="info-page" style="background: #fdfdfd; min-height: 100vh; padding: 40px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+            <div>
+                <h1 style="color: #2e7d32; font-weight: 700; margin: 0;">
+                    {% if current_user.is_admin %}System Recipe History{% else %}Cooking History{% endif %}
+                </h1>
+                <p style="color: #888; margin: 5px 0 0 0;">
+                    {% if current_user.is_admin %}Monitoring all user kitchen adventures{% else %}Your past <b>{{ user.diet_type }}</b> kitchen adventures{% endif %}
+                </p>
+            </div>
+            <a href="{{ url_for('main.dashboard') }}" style="text-decoration: none; color: #666; font-size: 0.9rem;">← Back to Dashboard</a>
+        </div>
+
+        {% if chats %}
+            {% for chat in chats %}
+            <div class="detail-card" style="margin-bottom: 30px; padding: 30px; border-radius: 15px; border-left: 8px solid #2e7d32; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                
+                {% if current_user.is_admin %}
+                <div class="admin-user-badge">
+                    <span>👤</span> <strong>{{ chat.user.name }}</strong> ({{ chat.user.email }})
+                </div>
+                {% endif %}
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px;">
+                    <span style="font-size: 0.9rem; color: #999; font-weight: 500;">
+                        📅 {{ chat.timestamp.strftime('%d %b, %Y') }} | 🕒 {{ chat.timestamp.strftime('%H:%M') }}
+                    </span>
+                    <div style="display: flex; gap: 20px;">
+                        {% if chat.youtube_url %}
+                        <a href="{{ chat.youtube_url }}" target="_blank" style="color: #FF0000; text-decoration: none; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                            <span>📺</span> Watch Again
+                        </a>
+                        {% endif %}
+                        <a href="{{ url_for('main.delete_history', chat_id=chat.id) }}" onclick="return confirm('Delete this recipe?')"  style="color: #d32f2f; text-decoration: none; font-size: 0.9rem; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                            <span>🗑</span> Remove
+                        </a>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin: 0; color: #333; font-size: 1.1rem;">{% if current_user.is_admin %}User asked:{% else %}You asked:{% endif %}</h4>
+                    <p style="margin: 5px 0 0 0; color: #555; font-style: italic; font-size: 1.05rem;">"{{ chat.message }}"</p>
+                </div>
+                
+                <div class="chat-response-content" style="background: #fcfdfc; padding: 25px; border-radius: 12px; font-size: 1rem; line-height: 1.8; color: #444; border: 1px solid #f0f5f0;">
+                    {{ chat.response }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="detail-card" style="text-align: center; padding: 80px; background: white; border-radius: 20px;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">🥣</div>
+                <p style="color: #888; font-size: 1.2rem;">No recipes saved yet. The culinary journey starts at the dashboard!</p>
+                <a href="/dashboard" style="display: inline-block; margin-top: 25px; background: #2e7d32; color: white; padding: 14px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);">Go to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Converts raw AI text into beautiful Markdown 
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.chat-response-content').forEach(function(el) {
+            const rawContent = el.innerText.trim();
+            el.innerHTML = marked.parse(rawContent);
+        });
+    });
+</script>
+{% endblock %}

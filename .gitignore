@@ -1,0 +1,17 @@
+# Security: Never upload API keys or secrets
+.env
+
+# Environment: No need to upload the virtual environment
+venv/
+env/
+
+# Cache: No need to upload compiled Python files
+__pycache__/
+*.pyc
+
+# Database: Keep your local data private
+instance/
+*.db
+
+# Uploads: Don't upload the photos you used for testing
+app/static/uploads/*

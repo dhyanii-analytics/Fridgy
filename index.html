@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <span class="intro-tag">Your Kitchen Assistant</span>
+    
+    <h1>Welcome to Fridgy</h1>
+    
+    <p class="quote">
+        In a busy world where deciding what to cook can feel overwhelming, a little planning can make all the difference. 
+        Fridgy helps you turn everyday cooking into a simple, enjoyable, and healthy experience.
+    </p>
+    
+   <a href="/signup" style="text-decoration: none;">
+    <button class="btn-primary">Get Started</button>
+</a>
+</div>
+
+<section class="gallery">
+    <h2>Recent Inspirations</h2>
+   <div class="gallery-grid">
+    <div class="gallery-item">
+        <img src="{{ url_for('static', filename='img/homepagefood1.jpg') }}" alt="Healthy Salad">
+        <p>Healthy Zen Bowl</p>
+    </div>
+    <div class="gallery-item">
+        <img src="{{ url_for('static', filename='img/homepagefood2.jpg') }}" alt="Creamy Pesto Pasta">
+        <p>Creamy Pesto Pasta</p>
+    </div>
+    <div class="gallery-item">
+        <img src="{{ url_for('static', filename='img/homepagefood3.jpg') }}" alt="Paneer Tikka Special">
+        <p>Paneer Tikka Special</p>
+    </div>
+</div>
+</section>
+
+<section class="features">
+    <h2>Why Fridgy?</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">🤖</div>
+            <h3>Smart AI</h3>
+            <p>Advanced intelligence that learns your taste and suggests perfectly matched recipes.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🥗</div>
+            <h3>Custom Food</h3>
+            <p>Whether you want Indian Veg or Continental, we customize to your craving.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">♻️</div>
+            <h3>Zero Waste</h3>
+            <p>Turn those last few items in your fridge into a gourmet meal.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🥑</div>
+            <h3>Any Diet</h3>
+            <p>Keto, Vegan, Gluten-Free, or high-protein—we support every lifestyle.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+    /* Navigation Hiding  */
+    nav, .navbar, .guest-nav { display: none !important; }
+
+    /* Markdown Element Styling  */
+    #recipe-content h1, #recipe-content h2, #recipe-content h3 {
+        color: #2e7d32;
+        margin-top: 20px;
+        font-weight: 700;
+    }
+    #recipe-content ul, #recipe-content ol {
+        padding-left: 25px;
+        margin-bottom: 15px;
+    }
+    #recipe-content li { margin-bottom: 10px; }
+
+    /* Star Rating Style */
+    .star-rating {
+        font-size: 2.5rem;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star-rating span:hover, .star-rating span.selected {
+        color: #ffca28;
+    }
+</style>
+
+<div class="info-page" style="background: #fdfdfd; min-height: 100vh; padding: 40px 20px;">
+    <div class="detail-card" style="max-width: 850px; margin: 0 auto; text-align: left; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+        
+        <h1 class="highlight-title" style="font-size: 2.5rem; color: #2e7d32; margin-bottom: 10px;">Your AI Kitchen Plan</h1>
+        <p style="color: #888; margin-bottom: 30px;">Specially prepared for <b>{{ user.name }}</b>'s {{ user.diet_type }} goals.</p>
+        
+        <div id="recipe-content" style="background: #f1f8e9; padding: 30px; border-radius: 15px; border-left: 6px solid #2e7d32; margin-bottom: 30px; line-height: 1.8; color: #333;">
+            {{ response }}
+        </div>
+
+        {% if link %}
+        <div style="margin-top: 30px; text-align: center; padding: 25px; background: #fff5f5; border-radius: 15px; border: 1px solid #ffebee;">
+            <h4 style="margin-bottom: 15px; color: #c62828;">📺 Cooking Tutorial</h4>
+            <p style="margin-bottom: 20px;">Follow along with this step-by-step video:</p>
+            <a href="{{ link }}" target="_blank" class="btn-primary" style="text-decoration: none; display: inline-block; background: #FF0000; padding: 12px 30px; border-radius: 30px; font-weight: bold;">
+                Watch on YouTube
+            </a>
+        </div>
+        {% endif %}
+
+        <div id="feedback-section" style="margin-top: 50px; padding: 30px; background: #f9f9f9; border-radius: 15px; text-align: center; border: 1px dashed #ccc;">
+            <h3 style="color: #333; margin-bottom: 10px;">How was your experience?</h3>
+            <p style="color: #666; margin-bottom: 15px;">Rate this recipe to help Fridgy improve!</p>
+            <div class="star-rating">
+                <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
+            </div>
+            <div id="thank-you-msg" style="display: none; color: #2e7d32; font-weight: bold; margin-top: 15px;">
+                Thank you! Your feedback helps us perfect your {{ user.goal }} plan. ✨
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+        <div style="text-align: center;">
+            <a href="/dashboard" style="color: #2e7d32; font-weight: 600; text-decoration: none; font-size: 1.1rem;">← Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    // 1. Render Markdown Content 
+    document.addEventListener('DOMContentLoaded', function() {
+        const recipeEl = document.getElementById('recipe-content');
+        recipeEl.innerHTML = marked.parse(recipeEl.innerText.trim());
+    });
+
+    // 2. Feedback Star Logic
+    function rate(stars) {
+        const starsEl = document.querySelectorAll('.star-rating span');
+        starsEl.forEach((s, idx) => {
+            s.style.color = idx < stars ? "#ffca28" : "#ddd";
+        });
+        document.getElementById('thank-you-msg').style.display = 'block';
+        // Logic to save stars to DB could go here
+    }
+</script>
+{% endblock %}

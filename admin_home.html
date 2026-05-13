@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="padding: 40px; text-align: center; background: #f8f9fa; min-height: 80vh;">
+    <h1 style="color: #2e7d32; font-family: 'Abril Fatface', serif; font-size: 3rem; margin-bottom: 10px;">Admin Command Center</h1>
+    <p style="color: #666; margin-bottom: 40px;">Select a specialized AI engine to test system performance.</p>
+
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); width: 300px; border-top: 5px solid #2e7d32;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 15px;">⚡ Quick Meal</h2>
+            <p style="color: #777; margin-bottom: 25px;">Standard 15-min recipe generator.</p>
+            <a href="{{ url_for('main.chat', mode='Quick') }}" style="background: #2e7d32; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; display: block; font-weight: bold;">Launch Bot</a>
+        </div>
+
+        <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); width: 300px; border-top: 5px solid #1565c0;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 15px;">🥗 Healthy Choice</h2>
+            <p style="color: #777; margin-bottom: 25px;">Nutritional & diet-focused engine.</p>
+            <a href="{{ url_for('main.chat', mode='Healthy') }}" style="background: #1565c0; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; display: block; font-weight: bold;">Launch Bot</a>
+        </div>
+
+        <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); width: 300px; border-top: 5px solid #ef6c00;">
+            <h2 style="font-size: 1.5rem; margin-bottom: 15px;">🎉 Party Mode</h2>
+            <p style="color: #777; margin-bottom: 25px;">Scaling recipes for large groups.</p>
+            <a href="{{ url_for('main.chat', mode='Party') }}" style="background: #ef6c00; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; display: block; font-weight: bold;">Launch Bot</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fridgy - Your Smart Meal Planner</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav>
+    <div class="logo-container">
+        <a href="{{ url_for('main.dashboard') if current_user.is_authenticated else url_for('main.index') }}" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+            <img src="{{ url_for('static', filename='img/fridgylogo.png') }}" alt="Fridgy Logo" class="logo-img">
+            <span class="logo-text">Fridgy</span>
+        </a>
+    </div>
+    
+    <ul class="nav-links">
+    {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('main.dashboard') }}">Home</a></li> {% if current_user.is_admin %}
+            <li><a href="{{ url_for('main.admin_dashboard') }}" style="color: #2e7d32; font-weight: bold;">📊 Admin Panel</a></li> {% endif %}
+
+        <li><a href="{{ url_for('main.history') }}">History</a></li>
+        <li><a href="{{ url_for('main.logout') }}" class="logout-btn" style="background-color: #c62828; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none;">Logout</a></li>
+    {% else %}
+        <li><a href="{{ url_for('main.index') }}">Home</a></li>
+        <li><a href="{{ url_for('main.how_it_works') }}">How It Works</a></li>
+        <li><a href="{{ url_for('main.login') }}" class="btn-login">Login</a></li>
+    {% endif %}
+    </ul>
+</nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Fridgy : Good food, happy moods. | Version 1.0.0</p>
+    </footer>
+</body>
+</html>

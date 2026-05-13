@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    /* 1. HIDE the guest navigation bar */
+    nav, .navbar, .guest-nav { 
+        display: none !important; 
+    }
+
+    /* 2. SHARED USER NAVIGATION  */
+    .user-nav-bar {
+        background: #ffffff;
+        padding: 12px 50px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        list-style: none;
+        margin: 0;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #444;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    /* 3. PROFILE CARD STYLING */
+    .profile-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .auth-card.signup-large {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 15px;
+        border-left: 8px solid #2e7d32;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+</style>
+
+<header class="user-nav-bar">
+    <a href="{{ url_for('main.dashboard') }}" class="nav-brand">
+        <img src="{{ url_for('static', filename='img/fridgylogo.png') }}" alt="Fridgy Logo" style="height: 45px;">
+        <span style="font-weight: bold; font-size: 1.5rem; color: #2e7d32; font-family: 'Poppins', sans-serif;">Fridgy</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="{{ url_for('main.dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('main.profile') }}" style="color: #2e7d32; border-bottom: 2px solid #2e7d32;">Profile</a></li>
+        <li><a href="{{ url_for('main.history') }}">History</a></li>
+        <li><a href="{{ url_for('main.logout') }}" style="color: #c62828;">Logout</a></li>
+    </ul>
+</header>
+
+<div class="profile-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+        <div>
+            <h1 style="color: #2e7d32; font-weight: 700; margin: 0;">My Profile</h1>
+            <p style="color: #888; margin: 5px 0 0 0;">Managing tastes for <b>{{ user.name }}</b></p>
+        </div>
+        <a href="{{ url_for('main.dashboard') }}" style="text-decoration: none; color: #666; font-size: 0.9rem;">← Back to Dashboard</a>
+    </div>
+
+    <div class="auth-card signup-large">
+        <h2 style="color: #333; margin-top: 0;">Edit My Preferences</h2>
+        <p style="color: #666; margin-bottom: 30px;">Update your details and Fridgy will adapt your recipes immediately.</p>
+        
+        <form method="POST" action="/profile">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Dietary Type</label>
+                    <select name="diet_type">
+                        <option value="Vegetarian" {% if user.diet_type == 'Vegetarian' %}selected{% endif %}>Vegetarian</option>
+                        <option value="Non-Vegetarian" {% if user.diet_type == 'Non-Vegetarian' %}selected{% endif %}>Non-Vegetarian</option>
+                        <option value="Vegan" {% if user.diet_type == 'Vegan' %}selected{% endif %}>Vegan</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Current Goal</label>
+                    <select name="goal">
+                        <option value="fitness" {% if user.goal == 'fitness' %}selected{% endif %}>Eat Clean & Stay Fit</option>
+                        <option value="new_recipes" {% if user.goal == 'new_recipes' %}selected{% endif %}>Level Up My Cooking</option>
+                        <option value="just_food" {% if user.goal == 'just_food' %}selected{% endif %}>Quick & Easy Meals</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Profession</label>
+                    <input type="text" name="profession" value="{{ user.profession }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Food Dislikes (Delete items here if you now like them!)</label>
+                <input type="text" name="dislikes" value="{{ user.dislikes }}" placeholder="e.g. Paneer, Mushrooms">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Allergies</label>
+                    <input type="text" name="allergies" value="{{ user.allergies }}">
+                </div>
+                <div class="form-group">
+                    <label>Cuisines</label>
+                    <input type="text" name="cuisine" value="{{ user.cuisine }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Medical Conditions</label>
+                <input type="text" name="diseases" value="{{ user.diseases }}">
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button type="submit" class="btn-primary full-width" style="background: #2e7d32; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer;">Save Changes</button>
+                <a href="/dashboard" style="display: block; text-align: center; margin-top: 15px; text-decoration: none; color: #d32f2f; font-weight: 500;">Cancel & Go Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

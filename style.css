@@ -1,0 +1,433 @@
+/* --- Global Styles --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    /* Minimal Pastel Dot Background */
+    background-color: #f8faf9;
+    background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: #333;
+    scroll-behavior: smooth;
+}
+
+/* --- Navigation --- */
+nav {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    padding: 5px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo-img {
+    height: 120px; /* Large logo for visibility */
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #2e7d32;
+    letter-spacing: -1.5px;
+    margin-left: -10px;
+
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #444;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #2e7d32;
+}
+
+.btn-login {
+    background-color: #2e7d32;
+    color: white !important;
+    padding: 10px 25px;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #1b5e20;
+}
+
+/* --- Hero Section & Quotes --- */
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.intro-tag {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin: 10px 0;
+}
+
+.quote {
+    font-family: 'Abril Fatface', serif;
+    font-size: 1.8rem;
+    color: #2e7d32;
+    max-width: 900px;
+    margin: 20px auto;
+    line-height: 1.4;
+    font-weight: 400;
+}
+
+.btn-primary {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 12px 45px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #1b5e20;
+    transform: translateY(-3px); /* Lifts the button slightly when hovered */
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+}
+
+/* --- Gallery Section (Centered) --- */
+.gallery {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.gallery-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.gallery-item {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    flex: 1;
+    max-width: 320px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.gallery-item p {
+    padding: 15px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* --- Why Fridgy Section (Side-by-Side) --- */
+.features {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.feature-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 40px auto 0 auto;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    flex: 1;
+    max-width: 280px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+/* --- How It Works Page Styles --- */
+.info-page {
+    text-align: center;
+    padding: 60px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.highlight-title {
+    color: #2e7d32;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.how-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2 Grid Layout */
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.detail-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+.step-num {
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    background-color: #2e7d32;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 45px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* --- Auth (Login/Signup) Styles --- */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 40px 20px;
+}
+
+.auth-card {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+/* Specific styling for the large Signup form */
+.signup-large {
+    max-width: 750px; 
+    max-height: 85vh; 
+    overflow-y: auto; 
+    padding-right: 15px;
+}
+
+/* Custom Scrollbar for the signup card */
+.signup-large::-webkit-scrollbar {
+    width: 6px;
+}
+.signup-large::-webkit-scrollbar-thumb {
+    background: #2e7d32;
+    border-radius: 10px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 2px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    background-color: #fff;
+    transition: 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #2e7d32;
+    outline: none;
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.1);
+}
+
+.full-width {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.auth-footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.auth-footer a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- Footer --- */
+footer {
+    padding: 30px;
+    background: #222;
+    color: white;
+    text-align: center;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* --- Progress Bar Styles --- */
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background-color: #e8f5e9;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #2e7d32;
+    transition: width 0.4s ease;
+}
+
+/* --- Signup UI Enhancements --- */
+
+.signup-large {
+    max-width: 750px; 
+    max-height: 85vh; 
+    overflow-y: auto; 
+    padding-right: 15px;
+}
+
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    padding-right: 45px !important; /* Makes sure text doesn't hide behind eye */
+}
+
+.eye-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-5%); /* Centers the eye icon vertically */
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #666;
+    user-select: none;
+    z-index: 10;
+}
+
+#strengthText {
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: block;
+    margin-top: 5px;
+}
+
+#matchText {
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: block;
+    margin-top: 5px;
+    min-height: 1.2em;
+}

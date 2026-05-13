@@ -1,0 +1,475 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+    /* 1. GLOBAL RESET & NAVIGATION HIDING  */
+    nav, .navbar, .guest-nav { 
+        display: none !important; 
+    }
+
+    body { 
+        background-color: #ffffff; 
+        margin: 0; 
+        padding: 0; 
+        overflow: hidden; 
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* 2. USER NAVIGATION BAR  */
+    .user-nav-bar {
+        background: #ffffff;
+        padding: 12px 50px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0; 
+        left: 0; 
+        right: 0;
+        z-index: 1000;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .nav-left-group { 
+        display: flex; 
+        align-items: center; 
+        gap: 20px; 
+    }
+    
+    .exit-link { 
+        text-decoration: none; 
+        color: #666; 
+        font-weight: 500; 
+        transition: color 0.2s; 
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .exit-link:hover { 
+        color: #2e7d32; 
+    }
+
+    .nav-brand { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+        text-decoration: none; 
+    }
+
+    .nav-links { 
+        display: flex; 
+        align-items: center; 
+        gap: 30px; 
+        list-style: none; 
+        margin: 0; 
+        padding: 0; 
+    }
+
+    .nav-links a { 
+        text-decoration: none; 
+        color: #444; 
+        font-weight: 500; 
+        transition: 0.2s; 
+    }
+
+    .nav-links a:hover { 
+        color: #2e7d32; 
+    }
+
+    .logout-btn {
+        background: #c62828; 
+        color: #ffffff !important; 
+        padding: 9px 22px;
+        border-radius: 8px; 
+        font-weight: bold; 
+        transition: background 0.3s ease !important;
+    }
+
+    .logout-btn:hover {
+        background: #b71c1c !important;
+    }
+
+    /* 3. GEMINI-STYLE CHAT UI  */
+    .chat-container {
+        max-width: 1000px;
+        margin: 70px auto 0 auto;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 70px);
+        background: #ffffff;
+        position: relative;
+    }
+
+    .chat-window {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 60px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar  */
+    .chat-window::-webkit-scrollbar { width: 8px; }
+    .chat-window::-webkit-scrollbar-track { background: transparent; }
+    .chat-window::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
+
+    .message { 
+        display: flex; 
+        gap: 24px; 
+        width: 100%; 
+        line-height: 1.8; 
+        font-size: 1.1rem; 
+        animation: fadeIn 0.4s ease; 
+    }
+
+    @keyframes fadeIn { 
+        from { opacity: 0; transform: translateY(10px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+
+    .user-msg { justify-content: flex-end; }
+    .ai-msg { justify-content: flex-start; }
+
+    .msg-content { 
+        max-width: 85%; 
+        color: #37352f; 
+        word-wrap: break-word; 
+    }
+
+    .msg-content h1, .msg-content h2, .msg-content h3 { 
+        color: #2e7d32; 
+        margin-top: 20px; 
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .msg-content ul, .msg-content ol { 
+        padding-left: 20px; 
+        margin: 15px 0; 
+    }
+
+    .user-pill { 
+        background: #f0f4f9; 
+        padding: 14px 24px; 
+        border-radius: 22px; 
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .ai-avatar {
+        width: 40px; 
+        height: 40px;
+        background: linear-gradient(45deg, #2e7d32, #66bb6a);
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center;
+        justify-content: center; 
+        color: white; 
+        flex-shrink: 0;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* 4. BOTTOM INPUT AREA  */
+    .input-area { 
+        padding: 30px 20px; 
+        background: #ffffff;
+        display: flex; 
+        justify-content: center; 
+    }
+
+    .input-wrapper {
+        width: 100%; 
+        max-width: 800px; 
+        background: #f0f4f9;
+        border-radius: 35px; 
+        display: flex; 
+        align-items: center; 
+        padding: 8px 24px;
+        transition: all 0.3s ease; 
+        border: 1px solid transparent;
+    }
+
+    .input-wrapper:focus-within { 
+        background: #ffffff; 
+        border-color: #2e7d32; 
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+    }
+
+    #user_message { 
+        flex-grow: 1; 
+        border: none; 
+        background: transparent; 
+        padding: 16px; 
+        outline: none; 
+        font-size: 1.1rem; 
+        color: #1f1f1f;
+    }
+    
+    .btn-icon { 
+        background: none; 
+        border: none; 
+        cursor: pointer; 
+        padding: 12px; 
+        font-size: 1.4rem; 
+        color: #5f6368; 
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-icon:hover { 
+        background: rgba(0,0,0,0.05);
+        color: #2e7d32; 
+    }
+
+    /* 5. COMPONENTS  */
+    .star-rating {
+        display: flex;
+        gap: 5px;
+        margin-top: 15px;
+    }
+    .star-btn {
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #ccc;
+        transition: color 0.2s, transform 0.2s;
+    }
+    .star-btn:hover {
+        transform: scale(1.2);
+        color: #ffca28;
+    }
+
+    #image-preview-container {
+        display: none;
+        padding: 10px 24px;
+        background: #f0f4f9;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        align-items: center;
+        gap: 15px;
+        border: 1px dashed #2e7d32;
+    }
+
+    .preview-img-chat {
+        max-width: 300px;
+        border-radius: 15px;
+        margin-bottom: 15px;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        display: block;
+    }
+
+    .btn-yt {
+        display: inline-block; 
+        background: #FF0000; 
+        color: white !important; 
+        padding: 10px 20px; 
+        border-radius: 25px; 
+        text-decoration: none; 
+        font-weight: bold; 
+        font-size: 0.9rem; 
+        margin-top: 15px;
+        box-shadow: 0 4px 10px rgba(255,0,0,0.2);
+        transition: transform 0.2s;
+    }
+
+    .btn-yt:hover {
+        transform: translateY(-2px);
+        background: #cc0000;
+    }
+</style>
+
+<header class="user-nav-bar">
+    <div class="nav-left-group">
+        <a href="{{ url_for('main.dashboard') }}" class="exit-link"><span>←</span> Back</a>
+        <a href="{{ url_for('main.dashboard') }}" class="nav-brand">
+            <img src="{{ url_for('static', filename='img/fridgylogo.png') }}" alt="Fridgy Logo" style="height: 48px;">
+            <span style="font-weight: bold; font-size: 1.6rem; color: #2e7d32;">Fridgy</span>
+        </a>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="{{ url_for('main.dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('main.history') }}">History</a></li>
+        <li><a href="{{ url_for('main.logout') }}" class="logout-btn">Logout</a></li>
+    </ul>
+</header>
+
+<div class="chat-container">
+    <div id="chat-window" class="chat-window">
+        <div class="message ai-msg">
+            <div class="ai-avatar">✨</div>
+            <div id="greeting-text" class="msg-content">
+                </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <div style="width: 100%; max-width: 800px;">
+            <div id="image-preview-container">
+                <span id="file-name" style="font-size: 0.9rem; color: #555; font-weight: 500;"></span>
+                <button type="button" onclick="clearImage()" style="background:none; border:none; color:#c62828; cursor:pointer; font-weight:bold;">✕ Remove</button>
+            </div>
+            
+            <form id="chat-form" class="input-wrapper">
+                <input type="file" id="chat_photo" accept="image/*" style="display: none;" onchange="handleImageSelect(this)">
+                <button type="button" class="btn-icon" title="Upload ingredients" onclick="document.getElementById('chat_photo').click()">📎</button>
+                <input type="text" id="user_message" placeholder="Ask Fridgy anything..." autocomplete="off">
+                <button type="submit" class="btn-icon" style="color: #1a73e8;">🚀</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. DYNAMIC GREETING LOGIC
+    function setGreeting() {
+        const hour = new Date().getHours();
+        let timeGreet = "Good Evening";
+        if (hour < 12) timeGreet = "Good Morning";
+        else if (hour < 17) timeGreet = "Good Afternoon";
+
+        const userName = "{{ user.name }}";
+        const mealType = hour >= 18 ? 'dinner' : (hour >= 12 ? 'lunch' : 'breakfast');
+
+        document.getElementById('greeting-text').innerHTML = `
+            <h3 style="margin-top:0;">${timeGreet}, ${userName}!</h3>
+            <p>Ready to prepare a healthy <b>${mealType}</b>? Upload a photo of your ingredients or just type your request.</p>
+            <p style="font-size:0.9rem; color:#666;"><i>Note: I am strictly avoiding ${'{{ user.allergies or "no known allergies" }}'}.</i></p>
+        `;
+    }
+    setGreeting();
+
+    // 2. INTERACTIVE RATING LOGIC
+    function submitRating(stars, element) {
+        const parent = element.parentElement;
+        parent.innerHTML = `<span style="color: #2e7d32; font-weight: bold; font-size: 1rem; animation: fadeIn 0.3s;">Thank you for your ${stars}-star rating! ✨</span>`;
+    }
+
+    // 3. FILE SELECT & PREVIEW LOGIC
+    const photoInput = document.getElementById('chat_photo');
+    const previewContainer = document.getElementById('image-preview-container');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    function handleImageSelect(input) {
+        if (input.files && input.files[0]) {
+            fileNameDisplay.textContent = `📎 Ready to analyze: ${input.files[0].name}`;
+            previewContainer.style.display = 'flex';
+        }
+    }
+
+    function clearImage() {
+        photoInput.value = '';
+        previewContainer.style.display = 'none';
+    }
+
+    // 4. CORE CHAT SUBMISSION (AJAX)
+    const chatForm = document.getElementById('chat-form');
+    const chatWindow = document.getElementById('chat-window');
+
+    chatForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const input = document.getElementById('user_message');
+        const msg = input.value;
+        const photoFile = photoInput.files[0];
+
+        if (!msg && !photoFile) return;
+
+        // --- Render User Message with Image Preview ---
+        const userDiv = document.createElement('div');
+        userDiv.className = 'message user-msg';
+        
+        let userContentHTML = `<div class="msg-content user-pill">`;
+        
+        if (photoFile) {
+            const tempUrl = URL.createObjectURL(photoFile);
+            userContentHTML += `
+                <img src="${tempUrl}" class="preview-img-chat">
+                <p style="font-size: 0.85rem; margin-top: 5px; color: #555;"><i>Analyzing these ingredients...</i></p>
+            `;
+        }
+        
+        userContentHTML += `<span>${msg || "Identifying ingredients from photo"}</span></div>`;
+        userDiv.innerHTML = userContentHTML;
+        chatWindow.appendChild(userDiv);
+        
+        // Reset inputs immediately
+        input.value = '';
+        const currentPhoto = photoFile; // Capture for the fetch
+        clearImage();
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        // --- Render Loading State ---
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message ai-msg';
+        loadingDiv.innerHTML = `
+            <div class="ai-avatar">✨</div>
+            <div class="msg-content" style="color: #888; font-style: italic;">Fridgy is thinking...</div>
+        `;
+        chatWindow.appendChild(loadingDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        // --- Backend API Call ---
+        const formData = new FormData();
+        formData.append('message', msg);
+        if (currentPhoto) formData.append('fridge_photo', currentPhoto);
+
+        try {
+            const response = await fetch('/get-chat-response', { 
+                method: 'POST', 
+                body: formData 
+            });
+            const data = await response.json();
+            
+            chatWindow.removeChild(loadingDiv);
+
+            const aiDiv = document.createElement('div');
+            aiDiv.className = 'message ai-msg';
+            
+            let htmlResponse = marked.parse(data.response);
+            
+            // Replace text star request with interactive buttons
+            if (htmlResponse.includes("1-5 stars")) {
+                htmlResponse = htmlResponse.replace("(1-5 stars) ⭐", `
+                    <div class="star-rating">
+                        <span class="star-btn" onclick="submitRating(1, this)">★</span>
+                        <span class="star-btn" onclick="submitRating(2, this)">★</span>
+                        <span class="star-btn" onclick="submitRating(3, this)">★</span>
+                        <span class="star-btn" onclick="submitRating(4, this)">★</span>
+                        <span class="star-btn" onclick="submitRating(5, this)">★</span>
+                    </div>
+                `);
+            }
+
+            // Append YouTube Link if available
+            if (data.youtube_url) {
+                htmlResponse += `<br><a href="${data.youtube_url}" target="_blank" class="btn-yt">📺 Watch Tutorial</a>`;
+            }
+
+            aiDiv.innerHTML = `
+                <div class="ai-avatar">✨</div>
+                <div class="msg-content">${htmlResponse}</div>
+            `;
+            chatWindow.appendChild(aiDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        } catch (error) {
+            if (chatWindow.contains(loadingDiv)) chatWindow.removeChild(loadingDiv);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'message ai-msg';
+            errorDiv.innerHTML = `<div class="ai-avatar">⚠️</div><div class="msg-content" style="color:red;">Failed to connect to Fridgy. Please check your internet.</div>`;
+            chatWindow.appendChild(errorDiv);
+        }
+    };
+</script>
+{% endblock %}

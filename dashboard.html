@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    /* 1. HIDE the guest navigation bar from layout.html  */
+    nav, .navbar, .guest-nav { 
+        display: none !important; 
+    }
+
+    /* 2. USER NAVIGATION BAR (Persistent for logged-in users)  */
+    .user-nav-bar {
+        background: #ffffff;
+        padding: 12px 50px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #444;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+        color: #2e7d32;
+    }
+
+    /* Highlighted Profile Button  */
+    .profile-link {
+        color: #2e7d32 !important;
+        border: 1px solid #2e7d32;
+        padding: 5px 15px;
+        border-radius: 20px;
+    }
+
+    .logout-btn {
+        background: #c62828;
+        color: #ffffff !important;
+        padding: 9px 22px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+        background: #b71c1c;
+    }
+
+    /* Card Hover Effects  */
+    .detail-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .detail-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+</style>
+
+<header class="user-nav-bar">
+    <a href="{{ url_for('main.dashboard') }}" class="nav-brand">
+        <img src="{{ url_for('static', filename='img/fridgylogo.png') }}" alt="Fridgy Logo" style="height: 45px; width: auto; display: block;">
+        <span style="font-weight: bold; font-size: 1.5rem; color: #2e7d32; font-family: 'Poppins', sans-serif;">Fridgy</span>
+    </a>
+
+    <ul class="nav-links">
+        <li><a href="{{ url_for('main.dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('main.profile') }}" class="profile-link">👤 Profile</a></li>
+        <li><a href="{{ url_for('main.history') }}">History</a></li>
+        <li><a href="{{ url_for('main.logout') }}" class="logout-btn">Logout</a></li>
+    </ul>
+</header>
+
+<div style="padding: 60px 20px; background: #fdfdfd; min-height: 90vh;">
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h1 style="font-size: 2.8rem; color: #2e7d32; margin-bottom: 10px; font-weight: 700;">Welcome back, {{ user.name }}!</h1>
+        <p style="color: #666; font-size: 1.2rem;">Ready to cook? Choose a mode to start your <b>{{ meal_type }}</b> conversation.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto;">
+        
+        <div class="detail-card" style="background: #fff; padding: 35px; border-radius: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f0f0f0;">
+            <div>
+                <div style="background: #e8f5e9; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 25px;">⚡</div>
+                <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: #333;">Quick Meal</h3>
+                <p style="color: #777; font-size: 1rem; line-height: 1.6;">15-min recipes designed for a busy <b>{{ user.profession }}</b>.</p>
+            </div>
+            <a href="/chat?mode=Quick" style="margin-top: 30px; text-decoration: none; text-align: center; background: #2e7d32; color: white; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1.1rem;">Start Chat</a>
+        </div>
+
+        <div class="detail-card" style="background: #fff; padding: 35px; border-radius: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f0f0f0;">
+            <div>
+                <div style="background: #fff3e0; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 25px;">🥗</div>
+                <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: #333;">Healthy Choice</h3>
+                <p style="color: #777; font-size: 1rem; line-height: 1.6;">Personalized plans for your goal: <b>{{ user.goal }}</b>.</p>
+            </div>
+            <a href="/chat?mode=Healthy" style="margin-top: 30px; text-decoration: none; text-align: center; background: #2e7d32; color: white; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1.1rem;">Get Healthy Plan</a>
+        </div>
+
+        <div class="detail-card" style="background: #fff; padding: 35px; border-radius: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f0f0f0;">
+            <div>
+                <div style="background: #e3f2fd; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 25px;">🎉</div>
+                <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: #333;">Party Mode</h3>
+                <p style="color: #777; font-size: 1rem; line-height: 1.6;">Scaling ingredients for large functions and events.</p>
+            </div>
+            <a href="/chat?mode=Party" style="margin-top: 30px; text-decoration: none; text-align: center; background: #1565c0; color: white; padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1.1rem;">Scale for 10+</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
