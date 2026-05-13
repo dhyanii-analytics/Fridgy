@@ -48,6 +48,9 @@ Launch: Run python run.py and you're ready to start cooking!
 ### Smart Dashboard
 ![Fridgy Dashboard](6_dashboard.png)
 
+### **👤 User Health & Lifestyle Profile**
+![User Profile](7_user_profile.png)
+
 ### AI Step-by-Step Cooking
 ![Fridgy Chat](12_%20stepbystep.png)
 
