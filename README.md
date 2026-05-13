@@ -3,9 +3,11 @@ Version: 1.0.0 (Initial Release)
 
 Status: Stable Prototype
 
+
 Hi! I'm Dhyanii, and I built Fridgy to solve a problem we all face: opening the fridge, seeing random ingredients, and having no idea what to cook. Instead of giving up and ordering fast food, Fridgy helps you make something great with what you already have!
 
 ✨ What it Does (The "Magic")
+
 📸 See Your Food: You don't even have to type! Just take a photo of your fridge, and the AI (Llama 3.2) will automatically list out your ingredients for you.
 
 🛡️ Health First: The app is smart. It remembers your allergies or medical conditions (like diabetes) and automatically filters out any recipes that aren't safe for you.
@@ -13,6 +15,8 @@ Hi! I'm Dhyanii, and I built Fridgy to solve a problem we all face: opening the 
 ⏰ Smart Planning: It knows the time! It suggests light breakfast ideas in the morning and proper dinner meals at night.
 
 📺 Learn by Watching: If you don't know how to cook a dish, don't worry. Every recipe comes with a direct YouTube link so you can follow a video tutorial.
+
+
 
 🛠️ How I Built It (The Tech Stack)
 The Brain: Powered by Groq Cloud using the Llama 3.2 model. It's super fast at "thinking" and "seeing" images.
@@ -38,5 +42,15 @@ Voice Control: I want to add a feature where you can say "Hey Fridgy, what's the
 Shopping List: Automatically making a list of missing items and sending it to your phone.
 
 Nutrition Tracker: Showing exactly how many calories and proteins are in every meal.
+## 📸 App Screenshots
+
+### Home Page
+![Fridgy Home](1_homepage1.png)
+
+### Smart Dashboard
+![Fridgy Dashboard](6_dashboard.png)
+
+### AI Step-by-Step Cooking
+![Fridgy Chat](12_%20stepbystep.png)
 
 Developed by Dhyanii Patel Final Year Project - M.Sc.(CA & IT), Indus University
